@@ -35,4 +35,14 @@ def script_to_audio(cfg: Config) -> list:
         with open(out_path, 'wb') as af:
             af.write(response.content)
         audio_files.append(out_path)
+
+    # Concatenate individual audio files into one
+    combined_path = os.path.join(cfg.audio_dir, 'combined.mp3')
+    logger.debug("Concatenating %d audio files into %s", len(audio_files), combined_path)
+    with open(combined_path, 'wb') as outfile:
+        for path in audio_files:
+            with open(path, 'rb') as infile:
+                outfile.write(infile.read())
+
+    audio_files.append(combined_path)
     return audio_files

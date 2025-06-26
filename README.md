@@ -21,6 +21,10 @@ python main.py config.yaml script
 python main.py config.yaml tts
 ```
 
+The TTS step produces individual MP3 files for each script entry and
+automatically concatenates them into `combined.mp3` inside the configured
+audio directory.
+
 ## Configuration
 
 `config.yaml` specifies model names, file paths and voice mapping.
