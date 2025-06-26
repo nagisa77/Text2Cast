@@ -1,5 +1,6 @@
 from .prompts import BRIEF2SCRIPT
 from .config import Config, OPENAI_API_KEY
+from .utils import wash_json
 import openai
 import json
 
@@ -13,7 +14,7 @@ def brief_to_script(cfg: Config) -> list:
         messages=[{"role": "system", "content": BRIEF2SCRIPT}, {"role": "user", "content": text}],
     )
     script_text = resp.choices[0].message.content.strip()
-    script = json.loads(script_text)
+    script = json.loads(wash_json(script_text))
     with open(cfg.script_path, 'w', encoding='utf-8') as f:
         json.dump(script, f, ensure_ascii=False, indent=2)
     return script
