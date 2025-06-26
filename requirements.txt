@@ -1,3 +1,4 @@
 openai
 pyyaml
 python-dotenv
+pytest

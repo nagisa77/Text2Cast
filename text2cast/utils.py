@@ -1,4 +1,7 @@
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def wash_json(text: str) -> str:
@@ -14,4 +17,6 @@ def wash_json(text: str) -> str:
     if text.startswith('```') and text.endswith('```'):
         text = re.sub(r'^```[^\n]*\n', '', text)
         text = re.sub(r'\n```$', '', text)
+
+    logger.debug("Washed text: %s", text)
     return text.strip()

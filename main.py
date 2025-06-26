@@ -5,7 +5,7 @@ from text2cast.summarizer import input_to_brief
 from text2cast.script_generator import brief_to_script
 from text2cast.tts import script_to_audio
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

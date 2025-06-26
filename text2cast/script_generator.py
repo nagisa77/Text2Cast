@@ -1,7 +1,7 @@
 from .prompts import BRIEF2SCRIPT
 from .config import Config, OPENAI_API_KEY
 from .utils import wash_json
-import openai
+from openai import OpenAI
 import json
 import logging
 
@@ -14,7 +14,7 @@ def brief_to_script(cfg: Config) -> list:
         text = f.read()
 
     logger.debug("Creating OpenAI client for script generation")
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI(api_key=OPENAI_API_KEY)
 
     logger.debug("Sending script generation request")
     resp = client.chat.completions.create(
@@ -22,7 +22,9 @@ def brief_to_script(cfg: Config) -> list:
         messages=[{"role": "system", "content": BRIEF2SCRIPT}, {"role": "user", "content": text}],
     )
     script_text = resp.choices[0].message.content.strip()
-    logger.debug("Received script text with %d characters", len(script_text))
+    logger.debug("Received script text: %s", script_text)
+
+    logger.debug("Is script_text a string? %s", isinstance(script_text, str))
 
     script = json.loads(wash_json(script_text))
     with open(cfg.script_path, 'w', encoding='utf-8') as f:
