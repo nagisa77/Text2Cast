@@ -1,6 +1,6 @@
 models:
-  summary: gpt-4o-mini
-  script: gpt-4o-mini
+  summary: gpt-4o
+  script: gpt-4o
   tts: tts-1
 paths:
   input: tmp/input.txt
@@ -8,5 +8,5 @@ paths:
   script: tmp/script.json
   audio: tmp/audio
 speaker_voice:
-  "0": alloy
-  "1": echo
+  1: onyx
+  2: shimmer

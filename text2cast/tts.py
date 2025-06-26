@@ -18,11 +18,14 @@ def script_to_audio(cfg: Config) -> list:
     client = openai.OpenAI(api_key=OPENAI_API_KEY)
     audio_files = []
 
+    logger.debug("speaker_voice: %s", cfg.speaker_voice)
+
     for idx, item in enumerate(script):
         speaker = item.get('speaker', '0')
         text = item['text']
         voice = cfg.speaker_voice.get(str(speaker), 'alloy')
-        out_path = os.path.join(cfg.audio_dir, f'{idx}_{speaker}.mp3')
+        logger.debug("speaker: %s, voice: %s", speaker, voice)
+        out_path = os.path.join(cfg.audio_dir, f'{idx}_{voice}.mp3')
 
         logger.debug("Generating audio for item %d with voice %s", idx, voice)
         response = client.audio.speech.create(
