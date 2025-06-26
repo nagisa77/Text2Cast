@@ -1,0 +1,12 @@
+models:
+  summary: gpt-4o-mini
+  script: gpt-4o-mini
+  tts: tts-1
+paths:
+  input: input.txt
+  brief: brief.txt
+  script: script.json
+  audio: audio
+speaker_voice:
+  "0": alloy
+  "1": echo
