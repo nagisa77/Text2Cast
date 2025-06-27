@@ -1,8 +1,11 @@
 import os
 from dataclasses import dataclass
 from typing import Dict
-import yaml
 from dotenv import load_dotenv
+import yaml
+import logging
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -20,6 +23,7 @@ class Config:
 
 
 def load_config(path: str) -> Config:
+    logger.debug("Loading config from %s", path)
     with open(path, 'r', encoding='utf-8') as f:
         data = yaml.safe_load(f)
     return Config(
@@ -34,13 +38,6 @@ def load_config(path: str) -> Config:
         tts_engine=data.get('tts_engine', 'openai'),
     )
 
-
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY is not set")
-
 VOLCENGINE_TOKEN = os.getenv('VOLCENGINE_TOKEN')
 VOLCENGINE_APP_ID = os.getenv('VOLCENGINE_APP_ID')
-
-
-

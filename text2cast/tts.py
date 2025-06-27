@@ -55,19 +55,30 @@ def script_to_audio(cfg: Config) -> list:
             )
             audio_data = response.content
         else:
+            logger.debug("VOLCENGINE_APP_ID: %s", VOLCENGINE_APP_ID)
+            logger.debug("VOLCENGINE_TOKEN: %s", VOLCENGINE_TOKEN)
+            logger.debug("tts_model: %s", cfg.tts_model)
+
             payload = {
                 "app": {
                     "appid": VOLCENGINE_APP_ID,
                     "token": VOLCENGINE_TOKEN,
-                    "cluster": "volcano_tts",
+                    "cluster": cfg.tts_model,
                 },
                 "user": {"uid": "text2cast"},
                 "audio": {
-                    "voice_type": cfg.tts_model,
+                    "voice_type": voice,
                     "encoding": "mp3",
-                    "sample_rate": 24000,
+                    "rate": 24000,
                 },
-                "request": {"reqid": str(uuid.uuid4()), "text": text},
+                # "resource_id": "volc.tts_async.emotion",
+                "request": {
+                    "reqid": str(uuid.uuid4()),
+                    "text": text,
+                    "text_type": "plain",
+                    "operation": "query",
+                    "sequence": 1
+                }
             }
             headers = {"Authorization": f"Bearer;{VOLCENGINE_TOKEN}"}
             resp = requests.post(
@@ -76,11 +87,15 @@ def script_to_audio(cfg: Config) -> list:
                 headers=headers,
                 timeout=30,
             )
+
             resp.raise_for_status()
             data = resp.json()
-            if data.get("code") != 0:
-                raise RuntimeError(data)
-            audio_data = base64.b64decode(data["data"]["audio"])
+
+            logger.debug("data.get('code'): %s", data.get("code"))
+
+            # if data.get("code") != 0:
+            #     raise RuntimeError(data)
+            audio_data = base64.b64decode(data["data"])
 
         logger.debug("Writing audio file to %s", out_path)
         with open(out_path, 'wb') as af:

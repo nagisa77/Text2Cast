@@ -1,0 +1,214 @@
+DEBUG:text2cast.config:Loading config from config.yaml
+INFO:__main__:Running TTS step
+DEBUG:text2cast.tts:Reading script JSON from tmp/script.json
+DEBUG:text2cast.tts:Ensuring audio directory tmp/audio exists
+DEBUG:text2cast.tts:Using Volcengine HTTP API for TTS
+DEBUG:text2cast.tts:speaker_voice: {'1': 'zh_male_beijingxiaoye_moon_bigtts', '2': 'zh_male_shenyeboke_moon_bigtts'}
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 0 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/0_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 1 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/1_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 2 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/2_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 3 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/3_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 4 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/4_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 5 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/5_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 6 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/6_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 7 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/7_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 8 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/8_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 9 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/9_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 10 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/10_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 11 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/11_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 12 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/12_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 13 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/13_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 14 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/14_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 15 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/15_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 16 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/16_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 17 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/17_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 18 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/18_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 19 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/19_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 20 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/20_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 2, voice: zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 21 with voice zh_male_shenyeboke_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/21_zh_male_shenyeboke_moon_bigtts.mp3
+DEBUG:text2cast.tts:speaker: 1, voice: zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:Generating audio for item 22 with voice zh_male_beijingxiaoye_moon_bigtts
+DEBUG:text2cast.tts:VOLCENGINE_APP_ID: 1485844638
+DEBUG:text2cast.tts:VOLCENGINE_TOKEN: x0b91YJM97DTpQpXwVr_5a-beCju73Y6
+DEBUG:text2cast.tts:tts_model: volcano_tts
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): openspeech.bytedance.com:443
+DEBUG:urllib3.connectionpool:https://openspeech.bytedance.com:443 "POST /api/v1/tts HTTP/1.1" 200 None
+DEBUG:text2cast.tts:data.get('code'): 3000
+DEBUG:text2cast.tts:Writing audio file to tmp/audio/22_zh_male_beijingxiaoye_moon_bigtts.mp3
+DEBUG:text2cast.tts:Concatenating 23 audio files into tmp/audio/combined.mp3
