@@ -1,4 +1,7 @@
 import os
+import uuid
+import base64
+import requests
 from .config import (
     Config,
     OPENAI_API_KEY,
@@ -7,7 +10,6 @@ from .config import (
 )
 import openai
 import logging
-from volcengine.spech.tts.TTSService import TTSService
 
 logger = logging.getLogger(__name__)
 
@@ -27,13 +29,10 @@ def script_to_audio(cfg: Config) -> list:
         logger.debug("Creating OpenAI client for TTS")
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
     elif cfg.tts_engine == "volcengine":
-        logger.debug("Creating Volcengine TTS client")
-
-        client = TTSService()
-        if VOLCENGINE_APP_ID:
-            client.set_app_id(VOLCENGINE_APP_ID)
-        if VOLCENGINE_TOKEN:
-            client.set_token(VOLCENGINE_TOKEN)
+        logger.debug("Using Volcengine HTTP API for TTS")
+        client = None
+        if not VOLCENGINE_TOKEN or not VOLCENGINE_APP_ID:
+            raise ValueError("VOLCENGINE_TOKEN or VOLCENGINE_APP_ID not set")
     else:
         raise ValueError(f"Unknown tts_engine: {cfg.tts_engine}")
 
@@ -56,9 +55,32 @@ def script_to_audio(cfg: Config) -> list:
             )
             audio_data = response.content
         else:
-            req = TTSRequest(text=text, voice_type=cfg.tts_model)
-            resp = client.synthesize(req)
-            audio_data = getattr(resp, "audio_data", resp)
+            payload = {
+                "app": {
+                    "appid": VOLCENGINE_APP_ID,
+                    "token": VOLCENGINE_TOKEN,
+                    "cluster": "volcano_tts",
+                },
+                "user": {"uid": "text2cast"},
+                "audio": {
+                    "voice_type": cfg.tts_model,
+                    "encoding": "mp3",
+                    "sample_rate": 24000,
+                },
+                "request": {"reqid": str(uuid.uuid4()), "text": text},
+            }
+            headers = {"Authorization": f"Bearer;{VOLCENGINE_TOKEN}"}
+            resp = requests.post(
+                "https://openspeech.bytedance.com/api/v1/tts",
+                json=payload,
+                headers=headers,
+                timeout=30,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            if data.get("code") != 0:
+                raise RuntimeError(data)
+            audio_data = base64.b64decode(data["data"]["audio"])
 
         logger.debug("Writing audio file to %s", out_path)
         with open(out_path, 'wb') as af:

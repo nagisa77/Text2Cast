@@ -2,4 +2,4 @@ openai
 pyyaml
 python-dotenv
 pytest
-volcengine
+requests
