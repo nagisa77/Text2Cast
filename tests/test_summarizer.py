@@ -23,14 +23,21 @@ def test_input_to_brief(mock_openai):
     brief_path = Path(tmp.name) / 'brief.txt'
     input_path.write_text('hello')
     cfg_data = {
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'tts'},
+        'tts_engine': 'openai',
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'openai': 'tts'}
+        },
         'paths': {
             'input': str(input_path),
             'brief': str(brief_path),
             'script': str(Path(tmp.name) / 'script.json'),
             'audio': str(Path(tmp.name) / 'audio')
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {
+            'openai': {'0': 'a', '1': 'b'}
+        }
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))

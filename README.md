@@ -36,13 +36,21 @@ tts_engine: openai
 models:
   summary: gpt-4o-mini
   script: gpt-4o-mini
-  tts: tts-1
+  tts:
+    openai: tts-1
+    volcengine: volcano_tts
+    minimax: speech-02-hd
 paths:
   input: input.txt
   brief: brief.txt
   script: script.json
   audio: audio
 speaker_voice:
-  "0": alloy
-  "1": echo
+  openai:
+    "0": alloy
+    "1": echo
+  volcengine:
+    "0": zh_male_beijingxiaoye_moon_bigtts
+  minimax:
+    "0": Chinese (Mandarin)_Warm_Bestie
 ```
