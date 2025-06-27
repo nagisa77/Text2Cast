@@ -4,6 +4,11 @@ from pathlib import Path
 from unittest import mock
 from text2cast.config import load_config
 from text2cast.summarizer import input_to_brief
+import os
+
+os.environ.setdefault('OPENAI_API_KEY', 'test')
+os.environ.setdefault('VOLCENGINE_TOKEN', 'token')
+os.environ.setdefault('VOLCENGINE_APP_ID', 'appid')
 
 
 class DummyResp:

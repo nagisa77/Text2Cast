@@ -6,6 +6,11 @@ from unittest import mock
 from text2cast.config import load_config
 from text2cast.script_generator import brief_to_script
 from text2cast.utils import wash_json
+import os
+
+os.environ.setdefault('OPENAI_API_KEY', 'test')
+os.environ.setdefault('VOLCENGINE_TOKEN', 'token')
+os.environ.setdefault('VOLCENGINE_APP_ID', 'appid')
 
 
 class DummyResp:

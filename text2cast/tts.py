@@ -1,5 +1,10 @@
 import os
-from .config import Config, OPENAI_API_KEY
+from .config import (
+    Config,
+    OPENAI_API_KEY,
+    VOLCENGINE_TOKEN,
+    VOLCENGINE_APP_ID,
+)
 import openai
 import logging
 
@@ -14,9 +19,23 @@ def script_to_audio(cfg: Config) -> list:
 
     logger.debug("Ensuring audio directory %s exists", cfg.audio_dir)
     os.makedirs(cfg.audio_dir, exist_ok=True)
-    logger.debug("Creating OpenAI client for TTS")
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+
     audio_files = []
+
+    if cfg.tts_engine == "openai":
+        logger.debug("Creating OpenAI client for TTS")
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    elif cfg.tts_engine == "volcengine":
+        logger.debug("Creating Volcengine TTS client")
+        from volcengine.tls.TTSService import TTSService
+        from volcengine.tls.models import TTSRequest
+        client = TTSService()
+        if VOLCENGINE_APP_ID:
+            client.set_app_id(VOLCENGINE_APP_ID)
+        if VOLCENGINE_TOKEN:
+            client.set_token(VOLCENGINE_TOKEN)
+    else:
+        raise ValueError(f"Unknown tts_engine: {cfg.tts_engine}")
 
     logger.debug("speaker_voice: %s", cfg.speaker_voice)
 
@@ -28,15 +47,22 @@ def script_to_audio(cfg: Config) -> list:
         out_path = os.path.join(cfg.audio_dir, f'{idx}_{voice}.mp3')
 
         logger.debug("Generating audio for item %d with voice %s", idx, voice)
-        response = client.audio.speech.create(
-            model=cfg.tts_model,
-            voice=voice,
-            input=text,
-        )
+
+        if cfg.tts_engine == "openai":
+            response = client.audio.speech.create(
+                model=cfg.tts_model,
+                voice=voice,
+                input=text,
+            )
+            audio_data = response.content
+        else:
+            req = TTSRequest(text=text, voice_type=cfg.tts_model)
+            resp = client.synthesize(req)
+            audio_data = getattr(resp, "audio_data", resp)
 
         logger.debug("Writing audio file to %s", out_path)
         with open(out_path, 'wb') as af:
-            af.write(response.content)
+            af.write(audio_data)
         audio_files.append(out_path)
 
     # Concatenate individual audio files into one
