@@ -72,6 +72,7 @@ def script_to_audio(cfg: Config) -> list:
                     "voice_type": voice,
                     "encoding": "mp3",
                     "rate": 24000,
+                    "speed_ratio": 1.3,
                 },
                 # "resource_id": "volc.tts_async.emotion",
                 "request": {
