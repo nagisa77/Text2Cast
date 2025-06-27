@@ -2,6 +2,7 @@ import os
 import uuid
 import base64
 import requests
+import time
 from .config import Config
 from . import config as cfg_module
 import openai
@@ -129,9 +130,18 @@ def script_to_audio(cfg: Config) -> list:
                 f"{cfg_module.MINIMAX_GROUP_ID}"
             )
             headers = {"Authorization": f"Bearer {cfg_module.MINIMAX_API_KEY}"}
-            resp = requests.post(url, headers=headers, json=payload, timeout=60)
-            resp.raise_for_status()
-            data = resp.json()
+
+            delay = 1
+            for _ in range(5):
+                resp = requests.post(url, headers=headers, json=payload, timeout=60)
+                resp.raise_for_status()
+                data = resp.json()
+                if data.get("base_resp", {}).get("status_code") == 1002:
+                    logger.warning("Rate limit encountered, sleeping for %s seconds", delay)
+                    time.sleep(delay)
+                    delay = min(delay * 2, 60)
+                    continue
+                break
             if data.get("base_resp", {}).get("status_code") != 0:
                 raise RuntimeError(data)
             audio_data = bytes.fromhex(data["data"]["audio"])
