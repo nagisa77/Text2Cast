@@ -16,6 +16,7 @@ class Config:
     script_path: str
     audio_dir: str
     speaker_voice: Dict[str, str]
+    tts_engine: str = "openai"
 
 
 def load_config(path: str) -> Config:
@@ -30,12 +31,16 @@ def load_config(path: str) -> Config:
         script_path=data['paths']['script'],
         audio_dir=data['paths']['audio'],
         speaker_voice=data['speaker_voice'],
+        tts_engine=data.get('tts_engine', 'openai'),
     )
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set")
+
+VOLCENGINE_TOKEN = os.getenv('VOLCENGINE_TOKEN')
+VOLCENGINE_APP_ID = os.getenv('VOLCENGINE_APP_ID')
 
 
 

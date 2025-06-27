@@ -1,12 +1,19 @@
+# 选择 TTS 引擎，可填 "openai" 或 "volcengine"
+tts_engine: openai
+
 models:
   summary: gpt-4o
   script: gpt-4o
+  # OpenAI TTS 模型名称或火山引擎音色
   tts: tts-1
+  # 当使用火山引擎时示例音色：cn_zhiyan_emo
 paths:
   input: tmp/input.txt
   brief: tmp/brief.txt
   script: tmp/script.json
   audio: tmp/audio
 speaker_voice:
-  1: onyx
-  2: shimmer
+  "0": alloy
+  "1": echo
+  # 更多示例：
+  # "2": shimmer
