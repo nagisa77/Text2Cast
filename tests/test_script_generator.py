@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import yaml
 import json
 import tempfile
@@ -26,9 +29,10 @@ def test_brief_to_script(mock_openai):
     brief_path.write_text('brief')
     cfg_data = {
         'tts_engine': 'openai',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'openai': 'tts'}
         },
         'paths': {
@@ -58,9 +62,10 @@ def test_brief_to_script_markdown(mock_openai):
     brief_path.write_text('brief')
     cfg_data = {
         'tts_engine': 'openai',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'openai': 'tts'}
         },
         'paths': {
@@ -91,9 +96,10 @@ def test_brief_to_script_plain_block(mock_openai):
     brief_path.write_text('brief')
     cfg_data = {
         'tts_engine': 'openai',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'openai': 'tts'}
         },
         'paths': {

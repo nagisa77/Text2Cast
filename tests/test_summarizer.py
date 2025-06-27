@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import yaml
 import tempfile
 from pathlib import Path
@@ -24,9 +27,10 @@ def test_input_to_brief(mock_openai):
     input_path.write_text('hello')
     cfg_data = {
         'tts_engine': 'openai',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'openai': 'tts'}
         },
         'paths': {

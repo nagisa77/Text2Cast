@@ -24,6 +24,7 @@ class Config:
     audio_dir: str
     speaker_voice: Dict[str, str]
     tts_engine: str = "openai"
+    chat_engine: str = "openai"
 
 
 def load_config(path: str) -> Config:
@@ -33,6 +34,8 @@ def load_config(path: str) -> Config:
     load_env_vars()
     tts_engine = data.get('tts_engine', 'openai')
     logger.debug("Selected tts_engine: %s", tts_engine)
+    chat_engine = data.get('chat_engine', 'openai')
+    logger.debug("Selected chat_engine: %s", chat_engine)
 
     tts_model = None
     if isinstance(data.get('models', {}).get('tts'), dict):
@@ -45,9 +48,17 @@ def load_config(path: str) -> Config:
     if isinstance(speaker_voice, dict) and tts_engine in speaker_voice:
         speaker_voice = speaker_voice[tts_engine]
 
+    model_summary = data['models']['summary']
+    if isinstance(model_summary, dict):
+        model_summary = model_summary.get(chat_engine)
+
+    model_script = data['models']['script']
+    if isinstance(model_script, dict):
+        model_script = model_script.get(chat_engine)
+
     return Config(
-        model_summary=data['models']['summary'],
-        model_script=data['models']['script'],
+        model_summary=model_summary,
+        model_script=model_script,
         tts_model=tts_model,
         input_path=data['paths']['input'],
         brief_path=data['paths']['brief'],
@@ -55,15 +66,17 @@ def load_config(path: str) -> Config:
         audio_dir=data['paths']['audio'],
         speaker_voice=speaker_voice,
         tts_engine=tts_engine,
+        chat_engine=chat_engine,
     )
 
 def load_env_vars() -> None:
     global OPENAI_API_KEY, VOLCENGINE_TOKEN, VOLCENGINE_APP_ID
-    global MINIMAX_API_KEY, MINIMAX_GROUP_ID
+    global MINIMAX_API_KEY, MINIMAX_GROUP_ID, DEEPSEEK_API_KEY
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
     VOLCENGINE_TOKEN = os.getenv('VOLCENGINE_TOKEN')
     VOLCENGINE_APP_ID = os.getenv('VOLCENGINE_APP_ID')
     MINIMAX_API_KEY = os.getenv('MINIMAX_API_KEY')
     MINIMAX_GROUP_ID = os.getenv('MINIMAX_GROUP_ID')
+    DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
 
 load_env_vars()

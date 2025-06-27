@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import json
 import yaml
 import tempfile
@@ -26,9 +29,10 @@ def test_script_to_audio(mock_openai):
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
         'tts_engine': 'openai',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'openai': 'tts'}
         },
         'paths': {
@@ -70,9 +74,10 @@ def test_script_to_audio_volc(mock_post):
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
         'tts_engine': 'volcengine',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'model',
-            'script': 'model',
+            'summary': {'openai': 'model'},
+            'script': {'openai': 'model'},
             'tts': {'volcengine': 'cn_zhiyan_emo'}
         },
         'paths': {
@@ -125,9 +130,10 @@ def test_script_to_audio_minimax(mock_post):
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
         'tts_engine': 'minimax',
+        'chat_engine': 'openai',
         'models': {
-            'summary': 'm',
-            'script': 'm',
+            'summary': {'openai': 'm'},
+            'script': {'openai': 'm'},
             'tts': {'minimax': 'speech-02-hd'}
         },
         'paths': {
