@@ -1,5 +1,5 @@
 from .prompts import BRIEF2SCRIPT
-from .config import Config, OPENAI_API_KEY
+from .config import Config, OPENAI_API_KEY, DEEPSEEK_API_KEY
 from .utils import wash_json
 import openai
 import json
@@ -14,7 +14,13 @@ def brief_to_script(cfg: Config) -> list:
         text = f.read()
 
     logger.debug("Creating OpenAI client for script generation")
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    if cfg.chat_engine == "deepseek":
+        client = openai.OpenAI(
+            api_key=DEEPSEEK_API_KEY,
+            base_url="https://api.deepseek.com"
+        )
+    else:
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
     logger.debug("Sending script generation request")
     resp = client.chat.completions.create(

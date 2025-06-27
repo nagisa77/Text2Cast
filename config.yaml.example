@@ -1,10 +1,15 @@
 tts_engine: volcengine
 # tts_engine: openai
 # tts_engine: minimax
+chat_engine: openai
 
 models:
-  summary: gpt-4o
-  script: gpt-4o
+  summary:
+    openai: gpt-4o
+    deepseek: deepseek-reasoner
+  script:
+    openai: gpt-4o
+    deepseek: deepseek-reasoner
   tts:
     volcengine: volcano_tts
     openai: tts-1
