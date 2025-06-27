@@ -97,7 +97,7 @@ def script_to_audio(cfg: Config) -> list:
 
             # if data.get("code") != 0:
             #     raise RuntimeError(data)
-            audio_data = base64.b64decode(data["data"]["audio"])
+            audio_data = base64.b64decode(data["data"])
         else:
             logger.debug("MINIMAX_GROUP_ID: %s", cfg_module.MINIMAX_GROUP_ID)
             logger.debug("tts_model: %s", cfg.tts_model)
@@ -113,7 +113,7 @@ def script_to_audio(cfg: Config) -> list:
               ],
               "voice_setting": {
                 "voice_id": voice,
-                "speed": 1,
+                "speed": 1.2,
                 "pitch": 0,
                 "vol": 1,
                 "latex_read": False
