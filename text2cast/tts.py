@@ -102,19 +102,27 @@ def script_to_audio(cfg: Config) -> list:
             logger.debug("tts_model: %s", cfg.tts_model)
 
             payload = {
-                "text": text,
-                "model": cfg.tts_model,
-                "voice_setting": {
-                    "voice_id": voice,
-                    "speed": 1.0,
-                    "pitch": 0,
-                    "emotion": "neutral",
-                },
-                "audio_setting": {
-                    "format": "mpeg",
-                    "sample_rate": 24000,
-                    "volume": 1.0,
-                },
+              "model": cfg.tts_model,
+              "text": text,
+              "timber_weights": [
+                {
+                  "voice_id": voice,
+                  "weight": 1
+                }
+              ],
+              "voice_setting": {
+                "voice_id": voice,
+                "speed": 1,
+                "pitch": 0,
+                "vol": 1,
+                "latex_read": False
+              },
+              "audio_setting": {
+                "sample_rate": 32000,
+                "bitrate": 128000,
+                "format": "mp3"
+              },
+              "language_boost": "auto"
             }
             url = (
                 f"https://api.minimax.chat/v1/t2a_v2?GroupId="
