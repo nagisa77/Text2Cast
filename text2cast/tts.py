@@ -10,6 +10,7 @@ from .config import (
 )
 import openai
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -46,56 +47,73 @@ def script_to_audio(cfg: Config) -> list:
         out_path = os.path.join(cfg.audio_dir, f'{idx}_{voice}.mp3')
 
         logger.debug("Generating audio for item %d with voice %s", idx, voice)
+        delay = 1
+        while True:
+            try:
+                if cfg.tts_engine == "openai":
+                    response = client.audio.speech.create(
+                        model=cfg.tts_model,
+                        voice=voice,
+                        input=text,
+                    )
+                    audio_data = response.content
+                else:
+                    logger.debug("VOLCENGINE_APP_ID: %s", VOLCENGINE_APP_ID)
+                    logger.debug("VOLCENGINE_TOKEN: %s", VOLCENGINE_TOKEN)
+                    logger.debug("tts_model: %s", cfg.tts_model)
 
-        if cfg.tts_engine == "openai":
-            response = client.audio.speech.create(
-                model=cfg.tts_model,
-                voice=voice,
-                input=text,
-            )
-            audio_data = response.content
-        else:
-            logger.debug("VOLCENGINE_APP_ID: %s", VOLCENGINE_APP_ID)
-            logger.debug("VOLCENGINE_TOKEN: %s", VOLCENGINE_TOKEN)
-            logger.debug("tts_model: %s", cfg.tts_model)
+                    payload = {
+                        "app": {
+                            "appid": VOLCENGINE_APP_ID,
+                            "token": VOLCENGINE_TOKEN,
+                            "cluster": cfg.tts_model,
+                        },
+                        "user": {"uid": "text2cast"},
+                        "audio": {
+                            "voice_type": voice,
+                            "encoding": "mp3",
+                            "rate": 24000,
+                        },
+                        # "resource_id": "volc.tts_async.emotion",
+                        "request": {
+                            "reqid": str(uuid.uuid4()),
+                            "text": text,
+                            "text_type": "plain",
+                            "operation": "query",
+                            "sequence": 1
+                        }
+                    }
+                    headers = {"Authorization": f"Bearer;{VOLCENGINE_TOKEN}"}
+                    resp = requests.post(
+                        "https://openspeech.bytedance.com/api/v1/tts",
+                        json=payload,
+                        headers=headers,
+                        timeout=30,
+                    )
 
-            payload = {
-                "app": {
-                    "appid": VOLCENGINE_APP_ID,
-                    "token": VOLCENGINE_TOKEN,
-                    "cluster": cfg.tts_model,
-                },
-                "user": {"uid": "text2cast"},
-                "audio": {
-                    "voice_type": voice,
-                    "encoding": "mp3",
-                    "rate": 24000,
-                },
-                # "resource_id": "volc.tts_async.emotion",
-                "request": {
-                    "reqid": str(uuid.uuid4()),
-                    "text": text,
-                    "text_type": "plain",
-                    "operation": "query",
-                    "sequence": 1
-                }
-            }
-            headers = {"Authorization": f"Bearer;{VOLCENGINE_TOKEN}"}
-            resp = requests.post(
-                "https://openspeech.bytedance.com/api/v1/tts",
-                json=payload,
-                headers=headers,
-                timeout=30,
-            )
+                    resp.raise_for_status()
+                    data = resp.json()
 
-            resp.raise_for_status()
-            data = resp.json()
+                    logger.debug("data.get('code'): %s", data.get("code"))
 
-            logger.debug("data.get('code'): %s", data.get("code"))
-
-            # if data.get("code") != 0:
-            #     raise RuntimeError(data)
-            audio_data = base64.b64decode(data["data"])
+                    # if data.get("code") != 0:
+                    #     raise RuntimeError(data)
+                    audio_data = base64.b64decode(data["data"])
+                break
+            except Exception as e:
+                msg = str(e).lower()
+                if (
+                    "rate limit" in msg
+                    or "status_code" in msg and "1002" in msg
+                    or "429" in msg
+                ):
+                    logger.warning(
+                        "Rate limit encountered, sleeping %.1f seconds", delay
+                    )
+                    time.sleep(delay)
+                    delay = min(delay * 2, 60)
+                    continue
+                raise
 
         logger.debug("Writing audio file to %s", out_path)
         with open(out_path, 'wb') as af:
