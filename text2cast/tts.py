@@ -7,6 +7,7 @@ from .config import (
 )
 import openai
 import logging
+from volcengine.spech.tts.TTSService import TTSService
 
 logger = logging.getLogger(__name__)
 
@@ -27,8 +28,7 @@ def script_to_audio(cfg: Config) -> list:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
     elif cfg.tts_engine == "volcengine":
         logger.debug("Creating Volcengine TTS client")
-        from volcengine.tls.TTSService import TTSService
-        from volcengine.tls.models import TTSRequest
+
         client = TTSService()
         if VOLCENGINE_APP_ID:
             client.set_app_id(VOLCENGINE_APP_ID)
