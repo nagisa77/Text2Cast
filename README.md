@@ -5,7 +5,7 @@ A pipeline that converts long text into a podcast script and audio.
 ## Usage
 
 1. Copy `config.yaml.example` to `config.yaml` and edit paths and voices.
-2. Copy `.env.example` to `.env` and fill in `OPENAI_API_KEY`,
+2. Copy `.env.example` to `.env` and fill in `OPENAI_API_KEY` or `DEEPSEEK_API_KEY`,
    `VOLCENGINE_TOKEN`/`VOLCENGINE_APP_ID`, or `MINIMAX_API_KEY`/`MINIMAX_GROUP_ID`
    depending on the TTS engine.
 3. Place your input text at the configured input path.
@@ -33,9 +33,14 @@ audio directory.
 
 ```
 tts_engine: openai
+chat_engine: openai
 models:
-  summary: gpt-4o-mini
-  script: gpt-4o-mini
+  summary:
+    openai: gpt-4o-mini
+    deepseek: deepseek-reasoner
+  script:
+    openai: gpt-4o-mini
+    deepseek: deepseek-reasoner
   tts:
     openai: tts-1
     volcengine: volcano_tts
