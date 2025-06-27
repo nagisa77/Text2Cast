@@ -25,14 +25,19 @@ def test_script_to_audio(mock_openai):
     ]
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'tts'},
+        'tts_engine': 'openai',
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'openai': 'tts'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(Path(tmp.name)/'brief.txt'),
             'script': str(script_path),
             'audio': str(audio_dir)
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {'openai': {'0': 'a', '1': 'b'}}
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
@@ -65,14 +70,20 @@ def test_script_to_audio_volc(mock_post):
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
         'tts_engine': 'volcengine',
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'cn_zhiyan_emo'},
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'volcengine': 'cn_zhiyan_emo'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(Path(tmp.name)/'brief.txt'),
             'script': str(script_path),
             'audio': str(audio_dir)
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {
+            'volcengine': {'0': 'a', '1': 'b'}
+        }
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
@@ -114,14 +125,20 @@ def test_script_to_audio_minimax(mock_post):
     script_path.write_text(json.dumps(script_data))
     cfg_data = {
         'tts_engine': 'minimax',
-        'models': {'summary': 'm', 'script': 'm', 'tts': 'speech-02-hd'},
+        'models': {
+            'summary': 'm',
+            'script': 'm',
+            'tts': {'minimax': 'speech-02-hd'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(Path(tmp.name)/'brief.txt'),
             'script': str(script_path),
             'audio': str(audio_dir)
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {
+            'minimax': {'0': 'a', '1': 'b'}
+        }
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))

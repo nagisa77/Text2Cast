@@ -31,16 +31,30 @@ def load_config(path: str) -> Config:
     with open(path, 'r', encoding='utf-8') as f:
         data = yaml.safe_load(f)
     load_env_vars()
+    tts_engine = data.get('tts_engine', 'openai')
+    logger.debug("Selected tts_engine: %s", tts_engine)
+
+    tts_model = None
+    if isinstance(data.get('models', {}).get('tts'), dict):
+        tts_model = data['models']['tts'].get(tts_engine)
+    else:
+        tts_model = data['models'].get('tts')
+    logger.debug("tts_model resolved to: %s", tts_model)
+
+    speaker_voice = data.get('speaker_voice', {})
+    if isinstance(speaker_voice, dict) and tts_engine in speaker_voice:
+        speaker_voice = speaker_voice[tts_engine]
+
     return Config(
         model_summary=data['models']['summary'],
         model_script=data['models']['script'],
-        tts_model=data['models']['tts'],
+        tts_model=tts_model,
         input_path=data['paths']['input'],
         brief_path=data['paths']['brief'],
         script_path=data['paths']['script'],
         audio_dir=data['paths']['audio'],
-        speaker_voice=data['speaker_voice'],
-        tts_engine=data.get('tts_engine', 'openai'),
+        speaker_voice=speaker_voice,
+        tts_engine=tts_engine,
     )
 
 def load_env_vars() -> None:

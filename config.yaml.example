@@ -5,26 +5,23 @@ tts_engine: volcengine
 models:
   summary: gpt-4o
   script: gpt-4o
-  # volcengine:
-  tts: volcano_tts
-  # OpenAI:
-  # tts: tts-1
-  # Minimax:
-  # tts: speech-02-hd
+  tts:
+    volcengine: volcano_tts
+    openai: tts-1
+    minimax: speech-02-hd
 paths:
   input: tmp/input.txt
   brief: tmp/brief.txt
   script: tmp/script.json
   audio: tmp/audio
 speaker_voice:
-  # volcengine
-  "1": zh_male_beijingxiaoye_moon_bigtts
-  "2": zh_female_meilinvyou_moon_bigtts
-  # ...
-
-  # OpenAI
-  # "0": alloy
-  # "1": echo
-  # ...
-  # Minimax
-  # "0": Chinese (Mandarin)_Warm_Bestie
+  volcengine:
+    "1": zh_male_beijingxiaoye_moon_bigtts
+    "2": zh_female_meilinvyou_moon_bigtts
+    # ...
+  openai:
+    "0": alloy
+    "1": echo
+    # ...
+  minimax:
+    "0": Chinese (Mandarin)_Warm_Bestie

@@ -25,14 +25,19 @@ def test_brief_to_script(mock_openai):
     script_path = Path(tmp.name) / 'script.json'
     brief_path.write_text('brief')
     cfg_data = {
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'tts'},
+        'tts_engine': 'openai',
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'openai': 'tts'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(brief_path),
             'script': str(script_path),
             'audio': str(Path(tmp.name)/'audio')
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {'openai': {'0': 'a', '1': 'b'}}
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
@@ -52,14 +57,19 @@ def test_brief_to_script_markdown(mock_openai):
     script_path = Path(tmp.name) / 'script.json'
     brief_path.write_text('brief')
     cfg_data = {
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'tts'},
+        'tts_engine': 'openai',
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'openai': 'tts'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(brief_path),
             'script': str(script_path),
             'audio': str(Path(tmp.name)/'audio')
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {'openai': {'0': 'a', '1': 'b'}}
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
@@ -80,14 +90,19 @@ def test_brief_to_script_plain_block(mock_openai):
     script_path = Path(tmp.name) / 'script.json'
     brief_path.write_text('brief')
     cfg_data = {
-        'models': {'summary': 'model', 'script': 'model', 'tts': 'tts'},
+        'tts_engine': 'openai',
+        'models': {
+            'summary': 'model',
+            'script': 'model',
+            'tts': {'openai': 'tts'}
+        },
         'paths': {
             'input': str(Path(tmp.name)/'input.txt'),
             'brief': str(brief_path),
             'script': str(script_path),
             'audio': str(Path(tmp.name)/'audio')
         },
-        'speaker_voice': {'0': 'a', '1': 'b'}
+        'speaker_voice': {'openai': {'0': 'a', '1': 'b'}}
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
