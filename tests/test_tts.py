@@ -51,8 +51,8 @@ def test_script_to_audio(mock_openai):
     tmp.cleanup()
 
 
-@mock.patch('volcengine.tls.TTSService.TTSService')
-def test_script_to_audio_volc(mock_tts):
+@mock.patch('requests.post')
+def test_script_to_audio_volc(mock_post):
     tmp = tempfile.TemporaryDirectory()
     script_path = Path(tmp.name) / 'script.json'
     audio_dir = Path(tmp.name) / 'audio'
@@ -74,11 +74,21 @@ def test_script_to_audio_volc(mock_tts):
     }
     cfg_file = Path(tmp.name) / 'cfg.yaml'
     cfg_file.write_text(yaml.dump(cfg_data))
-    mock_client = mock_tts.return_value
-    mock_client.synthesize.side_effect = [
-        type('r', (), {'audio_data': b'voice1'}),
-        type('r', (), {'audio_data': b'voice2'}),
-    ]
+    class Dummy:
+        def __init__(self, data):
+            self._data = data
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            import base64
+            return {
+                "code": 0,
+                "data": {"audio": base64.b64encode(self._data).decode()},
+            }
+
+    mock_post.side_effect = [Dummy(b"voice1"), Dummy(b"voice2")]
     cfg = load_config(cfg_file)
     paths = script_to_audio(cfg)
     assert Path(paths[0]).exists()
