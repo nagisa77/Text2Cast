@@ -26,6 +26,12 @@ text2cast config.yaml script
 text2cast config.yaml tts
 ```
 
+You can override configuration values on the command line, for example
+
+```bash
+text2cast config.yaml all --tts_engine openai --speaker_voice 0=alloy,1=echo
+```
+
 The TTS step produces individual MP3 files for each script entry and
 automatically concatenates them into `combined.mp3` inside the configured
 audio directory.
