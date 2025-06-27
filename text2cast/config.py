@@ -1,7 +1,11 @@
 import os
 from dataclasses import dataclass
 from typing import Dict
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except Exception:  # pragma: no cover - fallback when dotenv is missing
+    def load_dotenv(*args, **kwargs):
+        return None
 import yaml
 import logging
 
@@ -26,6 +30,7 @@ def load_config(path: str) -> Config:
     logger.debug("Loading config from %s", path)
     with open(path, 'r', encoding='utf-8') as f:
         data = yaml.safe_load(f)
+    load_env_vars()
     return Config(
         model_summary=data['models']['summary'],
         model_script=data['models']['script'],
@@ -38,6 +43,13 @@ def load_config(path: str) -> Config:
         tts_engine=data.get('tts_engine', 'openai'),
     )
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-VOLCENGINE_TOKEN = os.getenv('VOLCENGINE_TOKEN')
-VOLCENGINE_APP_ID = os.getenv('VOLCENGINE_APP_ID')
+def load_env_vars() -> None:
+    global OPENAI_API_KEY, VOLCENGINE_TOKEN, VOLCENGINE_APP_ID
+    global MINIMAX_API_KEY, MINIMAX_GROUP_ID
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    VOLCENGINE_TOKEN = os.getenv('VOLCENGINE_TOKEN')
+    VOLCENGINE_APP_ID = os.getenv('VOLCENGINE_APP_ID')
+    MINIMAX_API_KEY = os.getenv('MINIMAX_API_KEY')
+    MINIMAX_GROUP_ID = os.getenv('MINIMAX_GROUP_ID')
+
+load_env_vars()
