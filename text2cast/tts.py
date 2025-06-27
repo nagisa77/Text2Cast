@@ -2,12 +2,8 @@ import os
 import uuid
 import base64
 import requests
-from .config import (
-    Config,
-    OPENAI_API_KEY,
-    VOLCENGINE_TOKEN,
-    VOLCENGINE_APP_ID,
-)
+from .config import Config
+from . import config as cfg_module
 import openai
 import logging
 
@@ -27,12 +23,17 @@ def script_to_audio(cfg: Config) -> list:
 
     if cfg.tts_engine == "openai":
         logger.debug("Creating OpenAI client for TTS")
-        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+        client = openai.OpenAI(api_key=cfg_module.OPENAI_API_KEY)
     elif cfg.tts_engine == "volcengine":
         logger.debug("Using Volcengine HTTP API for TTS")
         client = None
-        if not VOLCENGINE_TOKEN or not VOLCENGINE_APP_ID:
+        if not cfg_module.VOLCENGINE_TOKEN or not cfg_module.VOLCENGINE_APP_ID:
             raise ValueError("VOLCENGINE_TOKEN or VOLCENGINE_APP_ID not set")
+    elif cfg.tts_engine == "minimax":
+        logger.debug("Using Minimax HTTP API for TTS")
+        client = None
+        if not cfg_module.MINIMAX_API_KEY or not cfg_module.MINIMAX_GROUP_ID:
+            raise ValueError("MINIMAX_API_KEY or MINIMAX_GROUP_ID not set")
     else:
         raise ValueError(f"Unknown tts_engine: {cfg.tts_engine}")
 
@@ -54,15 +55,15 @@ def script_to_audio(cfg: Config) -> list:
                 input=text,
             )
             audio_data = response.content
-        else:
-            logger.debug("VOLCENGINE_APP_ID: %s", VOLCENGINE_APP_ID)
-            logger.debug("VOLCENGINE_TOKEN: %s", VOLCENGINE_TOKEN)
+        elif cfg.tts_engine == "volcengine":
+            logger.debug("VOLCENGINE_APP_ID: %s", cfg_module.VOLCENGINE_APP_ID)
+            logger.debug("VOLCENGINE_TOKEN: %s", cfg_module.VOLCENGINE_TOKEN)
             logger.debug("tts_model: %s", cfg.tts_model)
 
             payload = {
                 "app": {
-                    "appid": VOLCENGINE_APP_ID,
-                    "token": VOLCENGINE_TOKEN,
+                    "appid": cfg_module.VOLCENGINE_APP_ID,
+                    "token": cfg_module.VOLCENGINE_TOKEN,
                     "cluster": cfg.tts_model,
                 },
                 "user": {"uid": "text2cast"},
@@ -80,7 +81,7 @@ def script_to_audio(cfg: Config) -> list:
                     "sequence": 1
                 }
             }
-            headers = {"Authorization": f"Bearer;{VOLCENGINE_TOKEN}"}
+            headers = {"Authorization": f"Bearer;{cfg_module.VOLCENGINE_TOKEN}"}
             resp = requests.post(
                 "https://openspeech.bytedance.com/api/v1/tts",
                 json=payload,
@@ -95,7 +96,37 @@ def script_to_audio(cfg: Config) -> list:
 
             # if data.get("code") != 0:
             #     raise RuntimeError(data)
-            audio_data = base64.b64decode(data["data"])
+            audio_data = base64.b64decode(data["data"]["audio"])
+        else:
+            logger.debug("MINIMAX_GROUP_ID: %s", cfg_module.MINIMAX_GROUP_ID)
+            logger.debug("tts_model: %s", cfg.tts_model)
+
+            payload = {
+                "text": text,
+                "model": cfg.tts_model,
+                "voice_setting": {
+                    "voice_id": voice,
+                    "speed": 1.0,
+                    "pitch": 0,
+                    "emotion": "neutral",
+                },
+                "audio_setting": {
+                    "format": "mpeg",
+                    "sample_rate": 24000,
+                    "volume": 1.0,
+                },
+            }
+            url = (
+                f"https://api.minimax.chat/v1/t2a_v2?GroupId="
+                f"{cfg_module.MINIMAX_GROUP_ID}"
+            )
+            headers = {"Authorization": f"Bearer {cfg_module.MINIMAX_API_KEY}"}
+            resp = requests.post(url, headers=headers, json=payload, timeout=60)
+            resp.raise_for_status()
+            data = resp.json()
+            if data.get("base_resp", {}).get("status_code") != 0:
+                raise RuntimeError(data)
+            audio_data = bytes.fromhex(data["data"]["audio"])
 
         logger.debug("Writing audio file to %s", out_path)
         with open(out_path, 'wb') as af:
