@@ -3,4 +3,3 @@ pyyaml
 python-dotenv
 pytest
 requests
-PyYAML

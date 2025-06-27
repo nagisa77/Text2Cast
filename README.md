@@ -2,25 +2,28 @@
 
 A pipeline that converts long text into a podcast script and audio.
 
+Install the package with `pip` and run the command line interface `text2cast`.
+
 ## Usage
 
 1. Copy `config.yaml.example` to `config.yaml` and edit paths and voices.
 2. Copy `.env.example` to `.env` and fill in `OPENAI_API_KEY` or `DEEPSEEK_API_KEY`,
    `VOLCENGINE_TOKEN`/`VOLCENGINE_APP_ID`, or `MINIMAX_API_KEY`/`MINIMAX_GROUP_ID`
    depending on the TTS engine.
-3. Place your input text at the configured input path.
-4. Run the full pipeline:
+3. Install the package (for local development use `pip install -e .`).
+4. Place your input text at the configured input path.
+5. Run the full pipeline:
 
 ```bash
-python main.py config.yaml all
+text2cast config.yaml all
 ```
 
 Or run individual steps:
 
 ```bash
-python main.py config.yaml summary
-python main.py config.yaml script
-python main.py config.yaml tts
+text2cast config.yaml summary
+text2cast config.yaml script
+text2cast config.yaml tts
 ```
 
 The TTS step produces individual MP3 files for each script entry and
