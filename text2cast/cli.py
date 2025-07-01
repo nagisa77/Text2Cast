@@ -5,6 +5,7 @@ from .config import load_config, Config
 from .summarizer import input_to_brief
 from .script_generator import brief_to_script
 from .tts import script_to_audio
+from .voice_clone import clone_voice
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,6 +32,11 @@ def apply_overrides(cfg: Config, args: argparse.Namespace) -> Config:
     if args.audio_dir:
         cfg.audio_dir = args.audio_dir
 
+    if args.clone_sample:
+        cfg.voice_clone_samples.extend(args.clone_sample)
+    if args.clone_name:
+        cfg.voice_clone_name = args.clone_name
+
     if args.speaker_voice:
         for item in args.speaker_voice:
             for pair in item.split(','):
@@ -52,6 +58,15 @@ def run_all(cfg: Config) -> None:
     script_to_audio(cfg)
 
 
+def run_clone(cfg: Config) -> None:
+    """Run voice cloning using configured samples and name."""
+    if not cfg.voice_clone_samples or not cfg.voice_clone_name:
+        raise ValueError("voice_clone_samples and voice_clone_name must be set")
+    logger.info("Cloning voice %s from %d samples", cfg.voice_clone_name, len(cfg.voice_clone_samples))
+    voice_id = clone_voice(cfg.voice_clone_samples, cfg.voice_clone_name)
+    print(voice_id)
+
+
 def main() -> None:
     """CLI entry point."""
     parser = argparse.ArgumentParser(description="Text2Cast pipeline")
@@ -65,6 +80,12 @@ def main() -> None:
     parser.add_argument("--brief_path")
     parser.add_argument("--script_path")
     parser.add_argument("--audio_dir")
+    parser.add_argument("--clone_name", help="Name for the cloned voice")
+    parser.add_argument(
+        "--clone_sample",
+        action="append",
+        help="Path to an audio sample, can be used multiple times",
+    )
     parser.add_argument(
         "--speaker_voice",
         action="append",
@@ -78,6 +99,7 @@ def main() -> None:
     sub.add_parser("script")
     sub.add_parser("tts")
     sub.add_parser("all")
+    sub.add_parser("clone")
     args, rest = parser.parse_known_args()
     if rest:
         args = parser.parse_args([args.config] + rest, namespace=args)
@@ -92,6 +114,9 @@ def main() -> None:
     elif args.command == "tts":
         logger.info("Running TTS step")
         script_to_audio(cfg)
+    elif args.command == "clone":
+        logger.info("Running voice clone step")
+        run_clone(cfg)
     else:
         run_all(cfg)
 

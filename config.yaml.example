@@ -30,3 +30,8 @@ speaker_voice:
     # ...
   minimax:
     "0": Chinese (Mandarin)_Warm_Bestie
+voice_clone:
+  name: my_voice
+  samples:
+    - sample1.wav
+    - sample2.wav
