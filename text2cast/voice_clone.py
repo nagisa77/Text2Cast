@@ -47,12 +47,13 @@ def clone_voice(samples: List[str], voice_name: str) -> str:
 
     logger.debug("Sending voice clone request with %d samples", len(samples))
     resp = requests.post(
-        "https://openspeech.bytedance.com/api/v1/voice_clone",
+        "https://openspeech.bytedance.com/api/v1/mega_tts/audio/upload",
         headers=headers,
         files=files,
         data={"payload": json.dumps(payload)},
         timeout=60,
     )
+    logger.debug("resp: %s", resp.text)
     resp.raise_for_status()
     data = resp.json()
     voice_id = data.get("data", {}).get("voice_id") or data.get("voice_id")
