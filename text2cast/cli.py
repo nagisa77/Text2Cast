@@ -78,7 +78,9 @@ def main() -> None:
     sub.add_parser("script")
     sub.add_parser("tts")
     sub.add_parser("all")
-    args = parser.parse_args()
+    args, rest = parser.parse_known_args()
+    if rest:
+        args = parser.parse_args([args.config] + rest, namespace=args)
     cfg = load_config(args.config)
     cfg = apply_overrides(cfg, args)
     if args.command == "summary":
