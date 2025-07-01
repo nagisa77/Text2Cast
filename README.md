@@ -36,6 +36,24 @@ The TTS step produces individual MP3 files for each script entry and
 automatically concatenates them into `combined.mp3` inside the configured
 audio directory.
 
+## Voice cloning with Volcengine
+
+To create a custom voice for the Volcengine TTS engine you can use the
+`clone_voice` helper:
+
+```python
+from text2cast.voice_clone import clone_voice
+
+voice_id = clone_voice([
+    "sample1.wav",
+    "sample2.wav",
+], "my_voice")
+print("New voice id:", voice_id)
+```
+
+The resulting `voice_id` can be configured in `speaker_voice` for later
+synthesis.
+
 ## Configuration
 
 `config.yaml` specifies model names, file paths and voice mapping.
