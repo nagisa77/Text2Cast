@@ -51,6 +51,14 @@ voice_id = clone_voice([
 print("New voice id:", voice_id)
 ```
 
+Alternatively the CLI provides a `clone` command:
+
+```bash
+text2cast config.yaml clone --clone_sample sample1.wav --clone_sample sample2.wav --clone_name my_voice
+```
+
+These parameters can also be set in `config.yaml` under `voice_clone`.
+
 The resulting `voice_id` can be configured in `speaker_voice` for later
 synthesis.
 
@@ -85,4 +93,9 @@ speaker_voice:
     "0": zh_male_beijingxiaoye_moon_bigtts
   minimax:
     "0": Chinese (Mandarin)_Warm_Bestie
+voice_clone:
+  name: my_voice
+  samples:
+    - sample1.wav
+    - sample2.wav
 ```

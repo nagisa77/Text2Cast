@@ -1,6 +1,6 @@
 import os
-from dataclasses import dataclass
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
 try:
     from dotenv import load_dotenv
 except Exception:  # pragma: no cover - fallback when dotenv is missing
@@ -23,6 +23,8 @@ class Config:
     script_path: str
     audio_dir: str
     speaker_voice: Dict[str, str]
+    voice_clone_samples: List[str] = field(default_factory=list)
+    voice_clone_name: Optional[str] = None
     tts_engine: str = "openai"
     chat_engine: str = "openai"
 
@@ -56,6 +58,10 @@ def load_config(path: str) -> Config:
     if isinstance(model_script, dict):
         model_script = model_script.get(chat_engine)
 
+    vc = data.get('voice_clone', {})
+    voice_clone_name = vc.get('name')
+    voice_clone_samples = vc.get('samples', []) if isinstance(vc, dict) else []
+
     return Config(
         model_summary=model_summary,
         model_script=model_script,
@@ -65,6 +71,8 @@ def load_config(path: str) -> Config:
         script_path=data['paths']['script'],
         audio_dir=data['paths']['audio'],
         speaker_voice=speaker_voice,
+        voice_clone_samples=voice_clone_samples,
+        voice_clone_name=voice_clone_name,
         tts_engine=tts_engine,
         chat_engine=chat_engine,
     )
