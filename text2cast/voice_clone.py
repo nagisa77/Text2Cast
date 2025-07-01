@@ -1,13 +1,22 @@
-import uuid
+import base64
+import os
 import requests
 import logging
 import json
-from typing import List
+from typing import List, Dict
 
 from . import config as cfg_module
 from .config import load_env_vars
 
 logger = logging.getLogger(__name__)
+
+
+def _encode_audio_file(path: str) -> Dict[str, str]:
+    """Return base64 encoded audio and format for a given file."""
+    with open(path, "rb") as af:
+        data = base64.b64encode(af.read()).decode("utf-8")
+    fmt = os.path.splitext(path)[1].lstrip(".")
+    return {"audio_bytes": data, "audio_format": fmt}
 
 
 def clone_voice(samples: List[str], voice_name: str) -> str:
@@ -31,30 +40,53 @@ def clone_voice(samples: List[str], voice_name: str) -> str:
     if not token or not appid:
         raise ValueError("VOLCENGINE_TOKEN or VOLCENGINE_APP_ID not set")
 
-    files = [("sample", open(p, "rb")) for p in samples]
-
-    payload = {
-        "app": {
-            "appid": appid,
-            "token": token,
-        },
-        "voice_name": voice_name,
-        "request": {
-            "reqid": str(uuid.uuid4()),
-        },
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer;{token}",
+        "Resource-Id": "volc.megatts.voiceclone",
     }
-    headers = {"Authorization": f"Bearer;{token}"}
 
-    logger.debug("Sending voice clone request with %d samples", len(samples))
+    audios = [_encode_audio_file(p) for p in samples]
+    payload = {
+        "appid": appid,
+        "speaker_id": voice_name,
+        "audios": audios,
+        "source": 2,
+        "language": 0,
+        "model_type": 1,
+    }
+
+    logger.debug("Uploading %d samples for voice %s", len(samples), voice_name)
     resp = requests.post(
-        "https://openspeech.bytedance.com/api/v1/voice_clone",
+        "https://openspeech.bytedance.com/api/v1/mega_tts/audio/upload",
+        json=payload,
         headers=headers,
-        files=files,
-        data={"payload": json.dumps(payload)},
         timeout=60,
     )
     resp.raise_for_status()
-    data = resp.json()
-    voice_id = data.get("data", {}).get("voice_id") or data.get("voice_id")
-    logger.debug("Received voice_id: %s", voice_id)
-    return voice_id
+    logger.debug("Clone response: %s", resp.json())
+    return voice_name
+
+
+def get_clone_status(voice_name: str) -> dict:
+    """Fetch cloning status for a voice."""
+    load_env_vars()
+    token = cfg_module.VOLCENGINE_TOKEN
+    appid = cfg_module.VOLCENGINE_APP_ID
+    if not token or not appid:
+        raise ValueError("VOLCENGINE_TOKEN or VOLCENGINE_APP_ID not set")
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer;{token}",
+        "Resource-Id": "volc.megatts.voiceclone",
+    }
+    body = {"appid": appid, "speaker_id": voice_name}
+    resp = requests.post(
+        "https://openspeech.bytedance.com/api/v1/mega_tts/status",
+        headers=headers,
+        json=body,
+        timeout=60,
+    )
+    resp.raise_for_status()
+    return resp.json()
