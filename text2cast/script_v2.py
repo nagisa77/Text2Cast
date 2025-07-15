@@ -121,6 +121,21 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
         script.append({"type": "sound_effect", "path": "article_end.mp3"})
         speaker = 1 if speaker == 2 else 2
 
+    script.append(
+        {
+            "speaker": str(speaker),
+            "text": "感谢您的收听，以上就是UU早报的全部内容，欢迎搜索订阅UU早晚报，晚上见。",
+            "type": "tts",
+        }
+    )
+    speaker = 1 if speaker == 2 else 2
+    script.append(
+        {
+            "speaker": str(speaker),
+            "text": "别走开，马上和你一起来了解不断飙升的日本大米价格……",
+            "type": "tts",
+        }
+    )
     script.append({"type": "sound_effect", "path": "outro.mp3"})
 
     logger.debug("Writing script to %s", cfg.script_path)
