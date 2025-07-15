@@ -4,6 +4,7 @@ import logging
 from .config import load_config, Config
 from .summarizer import input_to_brief
 from .script_generator import brief_to_script
+from .script_v2 import urls_to_script
 from .tts import script_to_audio
 from .voice_clone import clone_voice
 
@@ -97,6 +98,7 @@ def main() -> None:
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("summary")
     sub.add_parser("script")
+    sub.add_parser("script_v2")
     sub.add_parser("tts")
     sub.add_parser("all")
     sub.add_parser("clone")
@@ -111,6 +113,9 @@ def main() -> None:
     elif args.command == "script":
         logger.info("Running script generation step")
         brief_to_script(cfg)
+    elif args.command == "script_v2":
+        logger.info("Running script_v2 generation step")
+        urls_to_script(cfg)
     elif args.command == "tts":
         logger.info("Running TTS step")
         script_to_audio(cfg)
