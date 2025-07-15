@@ -7,6 +7,7 @@ from .config import Config
 from . import config as cfg_module
 import openai
 import logging
+import shutil
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,14 @@ def script_to_audio(cfg: Config) -> list:
                 se_path = os.path.join(cfg.audio_dir, se_path)
             if not os.path.exists(se_path):
                 logger.warning("Sound effect %s does not exist", se_path)
-            audio_files.append(se_path)
+            ext = os.path.splitext(se_path)[1]
+            out_path = os.path.join(cfg.audio_dir, f"{idx}_sound_effect{ext}")
+            try:
+                shutil.copy2(se_path, out_path)
+            except Exception as e:  # pragma: no cover - just log
+                logger.warning("Failed to copy %s to %s: %s", se_path, out_path, e)
+                out_path = se_path
+            audio_files.append(out_path)
             continue
 
         speaker = item.get("speaker", "0")
