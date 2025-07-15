@@ -75,7 +75,7 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
         summary = ""
         if content:
             try:
-                prompt = f"请用中文用1-2句话总结这篇文章的主要内容：{content}. 不要超过100字。 不要以‘这片文章讲了...’开头，直接简练总结。"
+                prompt = f"请用中文用1-2句话总结这篇文章的主要内容：{content}. 不要超过100字。 绝对不要以‘这片文章讲了...’开头，而是直接简练总结。"
                 resp = client.chat.completions.create(
                     model=cfg.model_script,
                     messages=[{"role": "user", "content": prompt}],
