@@ -3,4 +3,5 @@ pyyaml
 python-dotenv
 pytest
 requests
-firecrawl
+firecrawl-py>=2.14.0
+

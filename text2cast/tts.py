@@ -48,6 +48,8 @@ def script_to_audio(cfg: Config) -> list:
 
         speaker = item.get("speaker", "0")
         text = item["text"]
+        if str(speaker) not in cfg.speaker_voice:
+            continue
         voice = cfg.speaker_voice.get(str(speaker), "alloy")
         logger.debug("speaker: %s, voice: %s", speaker, voice)
         out_path = os.path.join(cfg.audio_dir, f"{idx}_{voice}.mp3")
@@ -77,7 +79,7 @@ def script_to_audio(cfg: Config) -> list:
                     "voice_type": voice,
                     "encoding": "mp3",
                     "rate": 24000,
-                    "speed_ratio": 1.3,
+                    "speed_ratio": 1.0,
                 },
                 # "resource_id": "volc.tts_async.emotion",
                 "request": {

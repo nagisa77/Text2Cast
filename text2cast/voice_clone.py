@@ -37,6 +37,10 @@ def clone_voice(samples: List[str], voice_name: str) -> str:
     load_env_vars()
     token = cfg_module.VOLCENGINE_TOKEN
     appid = cfg_module.VOLCENGINE_APP_ID
+
+    logger.info("VOLCENGINE_TOKEN: %s", token)
+    logger.info("VOLCENGINE_APP_ID: %s", appid) 
+
     if not token or not appid:
         raise ValueError("VOLCENGINE_TOKEN or VOLCENGINE_APP_ID not set")
 
