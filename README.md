@@ -34,7 +34,9 @@ text2cast config.yaml all --tts_engine openai --speaker_voice 0=alloy,1=echo
 
 The TTS step produces individual MP3 files for each script entry and
 automatically concatenates them into `combined.mp3` inside the configured
-audio directory.
+audio directory. Sound effect clips are copied into numbered files like
+`0_sound_effect.mp3` so they can be stitched together in order with the
+generated speech.
 
 Each script entry has a `type` field. Entries with `type: tts` contain
 spoken text along with a `speaker` ID, while `type: sound_effect` provides
