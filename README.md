@@ -36,6 +36,10 @@ The TTS step produces individual MP3 files for each script entry and
 automatically concatenates them into `combined.mp3` inside the configured
 audio directory.
 
+Each script entry has a `type` field. Entries with `type: tts` contain
+spoken text along with a `speaker` ID, while `type: sound_effect` provides
+the path to an audio clip to insert in the final mix.
+
 ## Voice cloning with Volcengine
 
 To create a custom voice for the Volcengine TTS engine you can use the

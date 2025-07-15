@@ -1,6 +1,7 @@
 import json
 import logging
 from typing import List, Dict
+from datetime import date
 
 import openai
 from firecrawl import FirecrawlApp
@@ -21,9 +22,10 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
     with open(cfg.input_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    articles = data.get("global", []) + data.get("local", [])
+    global_articles = data.get("global", [])
+    local_articles = data.get("local", [])
 
-    if not articles:
+    if not global_articles and not local_articles:
         raise ValueError("No articles found in input file")
 
     logger.debug("Creating Firecrawl client")
@@ -31,14 +33,34 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
 
     logger.debug("Creating OpenAI client for summarization")
     if cfg.chat_engine == "deepseek":
-        client = openai.OpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
+        client = openai.OpenAI(
+            api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com"
+        )
     else:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
     script: List[Dict[str, str]] = []
+
+    # Opening lines with current date
+    today = date.today()
+    weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+    date_str = f"{today.year}年{today.month}月{today.day}号{weekdays[today.weekday()]}"
+
+    script.append(
+        {"speaker": "1", "text": "全球视野，本土洞察！各位早上好,", "type": "tts"}
+    )
+    script.append(
+        {
+            "speaker": "2",
+            "text": f"早上好，今天是{date_str}，这里是UU早报，数据说话，观点交锋，现在开始——",
+            "type": "tts",
+        }
+    )
+    script.append({"type": "sound_effect", "path": "intro.mp3"})
+
     speaker = 1
 
-    for article in articles:
+    for article in global_articles:
         title = article.get("title", "")
         url = article.get("url")
         logger.info("Processing %s", url)
@@ -63,8 +85,43 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
                 logger.warning("Failed to summarize %s: %s", url, e)
 
         text = f"{title} {summary}".strip()
-        script.append({"speaker": str(speaker), "text": text})
+        script.append({"speaker": str(speaker), "text": text, "type": "tts"})
+        script.append({"type": "sound_effect", "path": "article_end.mp3"})
         speaker = 1 if speaker == 2 else 2
+
+    if local_articles:
+        script.append({"type": "sound_effect", "path": "transition.mp3"})
+
+    for article in local_articles:
+        title = article.get("title", "")
+        url = article.get("url")
+        logger.info("Processing %s", url)
+
+        content = ""
+        try:
+            result = fc.scrape_url(url, formats=["markdown"])
+            content = result.markdown or ""
+        except Exception as e:
+            logger.warning("Failed to scrape %s: %s", url, e)
+
+        summary = ""
+        if content:
+            try:
+                prompt = f"请用中文用1-2句话总结这篇文章的主要内容：{content}"
+                resp = client.chat.completions.create(
+                    model=cfg.model_script,
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                summary = resp.choices[0].message.content.strip()
+            except Exception as e:
+                logger.warning("Failed to summarize %s: %s", url, e)
+
+        text = f"{title} {summary}".strip()
+        script.append({"speaker": str(speaker), "text": text, "type": "tts"})
+        script.append({"type": "sound_effect", "path": "article_end.mp3"})
+        speaker = 1 if speaker == 2 else 2
+
+    script.append({"type": "sound_effect", "path": "outro.mp3"})
 
     logger.debug("Writing script to %s", cfg.script_path)
     with open(cfg.script_path, "w", encoding="utf-8") as f:

@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 def script_to_audio(cfg: Config) -> list:
     import json
+
     logger.debug("Reading script JSON from %s", cfg.script_path)
-    with open(cfg.script_path, 'r', encoding='utf-8') as f:
+    with open(cfg.script_path, "r", encoding="utf-8") as f:
         script = json.load(f)
 
     logger.debug("Ensuring audio directory %s exists", cfg.audio_dir)
@@ -41,13 +42,17 @@ def script_to_audio(cfg: Config) -> list:
     logger.debug("speaker_voice: %s", cfg.speaker_voice)
 
     for idx, item in enumerate(script):
-        speaker = item.get('speaker', '0')
-        text = item['text']
+        if item.get("type") == "sound_effect":
+            audio_files.append(item.get("path"))
+            continue
+
+        speaker = item.get("speaker", "0")
+        text = item["text"]
         if str(speaker) not in cfg.speaker_voice:
             continue
-        voice = cfg.speaker_voice.get(str(speaker))
+        voice = cfg.speaker_voice.get(str(speaker), "alloy")
         logger.debug("speaker: %s, voice: %s", speaker, voice)
-        out_path = os.path.join(cfg.audio_dir, f'{idx}_{voice}.mp3')
+        out_path = os.path.join(cfg.audio_dir, f"{idx}_{voice}.mp3")
 
         logger.debug("Generating audio for item %d with voice %s", idx, voice)
 
@@ -82,8 +87,8 @@ def script_to_audio(cfg: Config) -> list:
                     "text": text,
                     "text_type": "plain",
                     "operation": "query",
-                    "sequence": 1
-                }
+                    "sequence": 1,
+                },
             }
             headers = {"Authorization": f"Bearer;{cfg_module.VOLCENGINE_TOKEN}"}
             resp = requests.post(
@@ -109,27 +114,22 @@ def script_to_audio(cfg: Config) -> list:
             logger.debug("tts_model: %s", cfg.tts_model)
 
             payload = {
-              "model": cfg.tts_model,
-              "text": text,
-              "timber_weights": [
-                {
-                  "voice_id": voice,
-                  "weight": 1
-                }
-              ],
-              "voice_setting": {
-                "voice_id": voice,
-                "speed": 1.0,
-                "pitch": 0,
-                "vol": 1,
-                "latex_read": False
-              },
-              "audio_setting": {
-                "sample_rate": 32000,
-                "bitrate": 128000,
-                "format": "mp3"
-              },
-              "language_boost": "auto"
+                "model": cfg.tts_model,
+                "text": text,
+                "timber_weights": [{"voice_id": voice, "weight": 1}],
+                "voice_setting": {
+                    "voice_id": voice,
+                    "speed": 1.2,
+                    "pitch": 0,
+                    "vol": 1,
+                    "latex_read": False,
+                },
+                "audio_setting": {
+                    "sample_rate": 32000,
+                    "bitrate": 128000,
+                    "format": "mp3",
+                },
+                "language_boost": "auto",
             }
             url = (
                 f"https://api.minimax.chat/v1/t2a_v2?GroupId="
@@ -143,7 +143,9 @@ def script_to_audio(cfg: Config) -> list:
                 resp.raise_for_status()
                 data = resp.json()
                 if data.get("base_resp", {}).get("status_code") == 1002:
-                    logger.warning("Rate limit encountered, sleeping for %s seconds", delay)
+                    logger.warning(
+                        "Rate limit encountered, sleeping for %s seconds", delay
+                    )
                     time.sleep(delay)
                     delay = min(delay * 2, 60)
                     continue
@@ -153,16 +155,18 @@ def script_to_audio(cfg: Config) -> list:
             audio_data = bytes.fromhex(data["data"]["audio"])
 
         logger.debug("Writing audio file to %s", out_path)
-        with open(out_path, 'wb') as af:
+        with open(out_path, "wb") as af:
             af.write(audio_data)
         audio_files.append(out_path)
 
     # Concatenate individual audio files into one
-    combined_path = os.path.join(cfg.audio_dir, 'combined.mp3')
-    logger.debug("Concatenating %d audio files into %s", len(audio_files), combined_path)
-    with open(combined_path, 'wb') as outfile:
+    combined_path = os.path.join(cfg.audio_dir, "combined.mp3")
+    logger.debug(
+        "Concatenating %d audio files into %s", len(audio_files), combined_path
+    )
+    with open(combined_path, "wb") as outfile:
         for path in audio_files:
-            with open(path, 'rb') as infile:
+            with open(path, "rb") as infile:
                 outfile.write(infile.read())
 
     audio_files.append(combined_path)
