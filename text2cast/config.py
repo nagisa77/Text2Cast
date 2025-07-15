@@ -23,6 +23,7 @@ class Config:
     script_path: str
     audio_dir: str
     speaker_voice: Dict[str, str]
+    sound_effects: Dict[str, str] = field(default_factory=dict)
     voice_clone_samples: List[str] = field(default_factory=list)
     voice_clone_name: Optional[str] = None
     tts_engine: str = "openai"
@@ -62,6 +63,8 @@ def load_config(path: str) -> Config:
     voice_clone_name = vc.get('name')
     voice_clone_samples = vc.get('samples', []) if isinstance(vc, dict) else []
 
+    sound_effects = data.get('sound_effects', {})
+
     return Config(
         model_summary=model_summary,
         model_script=model_script,
@@ -71,6 +74,7 @@ def load_config(path: str) -> Config:
         script_path=data['paths']['script'],
         audio_dir=data['paths']['audio'],
         speaker_voice=speaker_voice,
+        sound_effects=sound_effects,
         voice_clone_samples=voice_clone_samples,
         voice_clone_name=voice_clone_name,
         tts_engine=tts_engine,

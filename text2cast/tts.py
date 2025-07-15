@@ -43,7 +43,12 @@ def script_to_audio(cfg: Config) -> list:
 
     for idx, item in enumerate(script):
         if item.get("type") == "sound_effect":
-            audio_files.append(item.get("path"))
+            se_path = item.get("path")
+            if not os.path.isabs(se_path):
+                se_path = os.path.join(cfg.audio_dir, se_path)
+            if not os.path.exists(se_path):
+                logger.warning("Sound effect %s does not exist", se_path)
+            audio_files.append(se_path)
             continue
 
         speaker = item.get("speaker", "0")
