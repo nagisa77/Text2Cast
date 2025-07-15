@@ -1,7 +1,7 @@
 tts_engine: volcengine
-# tts_engine: openai
+tts_engine: openai
 # tts_engine: minimax
-chat_engine: openai
+# chat_engine: deepseek
 
 models:
   summary:
@@ -11,27 +11,28 @@ models:
     openai: gpt-4o
     deepseek: deepseek-reasoner
   tts:
-    volcengine: volcano_tts
+    volcengine: volcano_icl
     openai: tts-1
     minimax: speech-02-hd
 paths:
-  input: tmp/input.txt
+  input: tmp/inputv2.json
   brief: tmp/brief.txt
   script: tmp/script.json
   audio: tmp/audio
 speaker_voice:
   volcengine:
-    "1": zh_male_beijingxiaoye_moon_bigtts
-    "2": zh_female_meilinvyou_moon_bigtts
-    # ...
+    # "1": zh_female_linjianvhai_moon_bigtts
+    # "2": zh_male_shaonianzixin_moon_bigtts
+    "1": S_bNncEnNv1
+    # "2": S_bNncEnNv1
+
+    # "1": S_lqN0OEUw1
+    # "2": zh_male_shaonianzixin_moon_bigtts
   openai:
-    "0": alloy
-    "1": echo
-    # ...
+    "1": alloy
+    "2": echo
   minimax:
-    "0": Chinese (Mandarin)_Warm_Bestie
-voice_clone:
-  name: my_voice
-  samples:
-    - sample1.wav
-    - sample2.wav
+    "1": nagisa_woman
+    "2": nagisa_man
+    # "1": woman_xmly_voice_1
+    # "2": woman_xmly_voice_2
