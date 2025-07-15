@@ -38,7 +38,9 @@ audio directory.
 
 Each script entry has a `type` field. Entries with `type: tts` contain
 spoken text along with a `speaker` ID, while `type: sound_effect` provides
-the path to an audio clip to insert in the final mix.
+the path to an audio clip to insert in the final mix. Sound effect paths
+used by `script_v2` are configured in the `sound_effects` section of
+`config.yaml`.
 
 ## Voice cloning with Volcengine
 
@@ -89,6 +91,11 @@ paths:
   brief: brief.txt
   script: script.json
   audio: audio
+sound_effects:
+  intro: intro.mp3
+  article_end: article_end.mp3
+  transition: transition.mp3
+  outro: outro.mp3
 speaker_voice:
   openai:
     "0": alloy

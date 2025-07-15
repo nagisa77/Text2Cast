@@ -19,6 +19,11 @@ paths:
   brief: tmp/brief.txt
   script: tmp/script.json
   audio: tmp/audio
+sound_effects:
+  intro: intro.mp3
+  article_end: article_end.mp3
+  transition: transition.mp3
+  outro: outro.mp3
 speaker_voice:
   volcengine:
     # "1": zh_female_linjianvhai_moon_bigtts

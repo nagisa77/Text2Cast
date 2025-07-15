@@ -56,7 +56,8 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
             "type": "tts",
         }
     )
-    script.append({"type": "sound_effect", "path": "intro.mp3"})
+    intro_path = cfg.sound_effects.get("intro", "intro.mp3")
+    script.append({"type": "sound_effect", "path": intro_path})
 
     speaker = 1
 
@@ -102,11 +103,13 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
 
         text = f"{title} {summary}".strip()
         script.append({"speaker": str(speaker), "text": text, "type": "tts"})
-        script.append({"type": "sound_effect", "path": "article_end.mp3"})
+        article_end = cfg.sound_effects.get("article_end", "article_end.mp3")
+        script.append({"type": "sound_effect", "path": article_end})
         speaker = 1 if speaker == 2 else 2
 
     if local_articles:
-        script.append({"type": "sound_effect", "path": "transition.mp3"})
+        transition = cfg.sound_effects.get("transition", "transition.mp3")
+        script.append({"type": "sound_effect", "path": transition})
 
     for article in local_articles:
         title = article.get("title", "")
@@ -134,7 +137,8 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
 
         text = f"{title} {summary}".strip()
         script.append({"speaker": str(speaker), "text": text, "type": "tts"})
-        script.append({"type": "sound_effect", "path": "article_end.mp3"})
+        article_end = cfg.sound_effects.get("article_end", "article_end.mp3")
+        script.append({"type": "sound_effect", "path": article_end})
         speaker = 1 if speaker == 2 else 2
 
     script.append(
@@ -152,7 +156,8 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
             "type": "tts",
         }
     )
-    script.append({"type": "sound_effect", "path": "outro.mp3"})
+    outro_path = cfg.sound_effects.get("outro", "outro.mp3")
+    script.append({"type": "sound_effect", "path": outro_path})
 
     logger.debug("Writing script to %s", cfg.script_path)
     with open(cfg.script_path, "w", encoding="utf-8") as f:
