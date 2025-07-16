@@ -3,6 +3,7 @@ import uuid
 import base64
 import requests
 import time
+import subprocess
 from .config import Config
 from . import config as cfg_module
 import openai
@@ -10,6 +11,52 @@ import logging
 import shutil
 
 logger = logging.getLogger(__name__)
+
+TARGET_RATE = 44100  # output sample-rate (Hz)
+TARGET_CH = 2        # channels (1 = mono, 2 = stereo)
+BITRATE = 192        # average bitrate (kbps)
+
+
+def convert_audio(input_path: str, output_path: str) -> None:
+    """Convert audio file to the target format using ffmpeg."""
+    tmp_path = output_path + ".tmp"
+    if input_path != tmp_path:
+        os.rename(input_path, tmp_path)
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-i",
+        tmp_path,
+        "-ar",
+        str(TARGET_RATE),
+        "-ac",
+        str(TARGET_CH),
+        "-b:a",
+        f"{BITRATE}k",
+        output_path,
+    ]
+    subprocess.run(cmd, check=True)
+    os.remove(tmp_path)
+
+
+def generate_silence(output_path: str, duration: float) -> None:
+    """Generate a silent MP3 file of the given duration."""
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-f",
+        "lavfi",
+        "-i",
+        f"anullsrc=r={TARGET_RATE}:cl=stereo",
+        "-t",
+        str(duration),
+        "-ac",
+        str(TARGET_CH),
+        "-b:a",
+        f"{BITRATE}k",
+        output_path,
+    ]
+    subprocess.run(cmd, check=True)
 
 
 def script_to_audio(cfg: Config) -> list:
@@ -56,6 +103,13 @@ def script_to_audio(cfg: Config) -> list:
             except Exception as e:  # pragma: no cover - just log
                 logger.warning("Failed to copy %s to %s: %s", se_path, out_path, e)
                 out_path = se_path
+            convert_audio(out_path, out_path)
+            audio_files.append(out_path)
+            continue
+        if item.get("type") == "silent":
+            duration = float(item.get("duration", 1))
+            out_path = os.path.join(cfg.audio_dir, f"{idx}_silent.mp3")
+            generate_silence(out_path, duration)
             audio_files.append(out_path)
             continue
 
@@ -168,8 +222,10 @@ def script_to_audio(cfg: Config) -> list:
             audio_data = bytes.fromhex(data["data"]["audio"])
 
         logger.debug("Writing audio file to %s", out_path)
-        with open(out_path, "wb") as af:
+        tmp = out_path + ".raw"
+        with open(tmp, "wb") as af:
             af.write(audio_data)
+        convert_audio(tmp, out_path)
         audio_files.append(out_path)
 
     # Concatenate individual audio files into one

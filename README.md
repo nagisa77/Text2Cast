@@ -36,13 +36,15 @@ The TTS step produces individual MP3 files for each script entry and
 automatically concatenates them into `combined.mp3` inside the configured
 audio directory. Sound effect clips are copied into numbered files like
 `0_sound_effect.mp3` so they can be stitched together in order with the
-generated speech.
+generated speech. All audio is normalized to 44.1 kHz stereo at 192 kbps so
+that locally provided clips and generated speech share the same format.
 
 Each script entry has a `type` field. Entries with `type: tts` contain
 spoken text along with a `speaker` ID, while `type: sound_effect` provides
-the path to an audio clip to insert in the final mix. Sound effect paths
-used by `script_v2` are configured in the `sound_effects` section of
-`config.yaml`.
+the path to an audio clip to insert in the final mix. `type: silent` inserts
+a period of silence and supports a `duration` field (seconds) and an optional
+`direction` marker. Sound effect paths used by `script_v2` are configured in
+the `sound_effects` section of `config.yaml`.
 
 ## Voice cloning with Volcengine
 

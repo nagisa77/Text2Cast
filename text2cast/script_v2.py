@@ -101,8 +101,11 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
             except Exception as e:
                 logger.warning("Failed to summarize %s: %s", url, e)
 
-        text = f"{title} {summary}".strip()
-        script.append({"speaker": str(speaker), "text": text, "type": "tts"})
+        if title:
+            script.append({"speaker": str(speaker), "text": title, "type": "tts"})
+            script.append({"type": "silent", "duration": 1, "direction": "after_title"})
+        if summary:
+            script.append({"speaker": str(speaker), "text": summary, "type": "tts"})
         article_end = cfg.sound_effects.get("article_end", "article_end.mp3")
         script.append({"type": "sound_effect", "path": article_end})
         speaker = 1 if speaker == 2 else 2
@@ -135,8 +138,11 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
             except Exception as e:
                 logger.warning("Failed to summarize %s: %s", url, e)
 
-        text = f"{title} {summary}".strip()
-        script.append({"speaker": str(speaker), "text": text, "type": "tts"})
+        if title:
+            script.append({"speaker": str(speaker), "text": title, "type": "tts"})
+            script.append({"type": "silent", "duration": 1, "direction": "after_title"})
+        if summary:
+            script.append({"speaker": str(speaker), "text": summary, "type": "tts"})
         article_end = cfg.sound_effects.get("article_end", "article_end.mp3")
         script.append({"type": "sound_effect", "path": article_end})
         speaker = 1 if speaker == 2 else 2
