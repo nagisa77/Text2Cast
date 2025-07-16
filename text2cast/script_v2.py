@@ -103,7 +103,7 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
 
         if title:
             script.append({"speaker": str(speaker), "text": title, "type": "tts"})
-            script.append({"type": "silent", "duration": 1, "direction": "after_title"})
+            script.append({"type": "silent", "duration": 0.5, "direction": "after_title"})
         if summary:
             script.append({"speaker": str(speaker), "text": summary, "type": "tts"})
         article_end = cfg.sound_effects.get("article_end", "article_end.mp3")
@@ -140,7 +140,7 @@ def urls_to_script(cfg: Config) -> List[Dict[str, str]]:
 
         if title:
             script.append({"speaker": str(speaker), "text": title, "type": "tts"})
-            script.append({"type": "silent", "duration": 1, "direction": "after_title"})
+            script.append({"type": "silent", "duration": 0.5, "direction": "after_title"})
         if summary:
             script.append({"speaker": str(speaker), "text": summary, "type": "tts"})
         article_end = cfg.sound_effects.get("article_end", "article_end.mp3")

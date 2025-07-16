@@ -8,7 +8,7 @@ from .script_v2 import urls_to_script
 from .tts import script_to_audio
 from .voice_clone import clone_voice
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
